@@ -1,11 +1,11 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include <vector>
+#include <array>
 #include <fstream>
 #include <ctime>
 #include <cstdlib>
-#include "letra_existe.hpp"
+
 #include "imprime_cabecalho.hpp"
 #include "le_arquivo.hpp"
 #include "sorteia_palavra.hpp"
@@ -17,24 +17,34 @@
 
 using namespace std;
 
-string palavra_secreta; 
-map<char, bool> chutou;
-vector<char> chutes_errados;
+// with big namespaces (multiple namespaces, like Hangman::Foo::Bar) we can
+// give a "nickname" to it. E.g: namespace Foobar = Hangman::Foo::Bar
+
+// static for vars makes it available only for this translation unit
+static string palavra_secreta;
+// map - key and value, similar to JSON
+// we'll have char keys for the characters of each word
+// we'll have bool values for each key (true if it has already been chosen and false otherwise)
+static map<char, bool> chutou;
+static array<char, 5> chutes_errados;
 
 int main ()
 {
+    int guessesCount = 0;
+
     imprime_cabecalho();
 
     le_arquivo();
     palavra_secreta = sorteia_palavra();
 
-    while(nao_acertou(palavra_secreta, chutou) && chutes_errados.size() < 5)
+    while(nao_acertou(palavra_secreta, chutou) && guessesCount < 5)
     {
-        imprime_erros(chutes_errados);
+        guessesCount++;
+        Hangman::imprime_erros(chutes_errados);
 
         imprime_palavra(palavra_secreta, chutou);
 
-        chuta(&chutou, &chutes_errados);
+        chuta(chutou, chutes_errados, palavra_secreta, guessesCount);
     }
 
     cout << "Fim de jogo!" << endl;

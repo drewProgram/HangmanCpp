@@ -1,3 +1,7 @@
-#include <vector>
+#include <array>
 
-void imprime_erros(std::vector<char> chutes_errados);
+namespace Hangman
+{
+	// param value won't be changed with const
+	void imprime_erros(const std::array<char, 5>& chutes_errados);
+}

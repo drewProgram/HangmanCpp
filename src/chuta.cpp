@@ -3,20 +3,23 @@
 #include "chuta.hpp"
 #include "letra_existe.hpp"
 
-void chuta(std::map<char, bool>* chutou, std::vector<char>* chutes_errados)
+void chuta(std::map<char, bool>& chutou, std::array<char, 5>& chutes_errados,
+    std::string& palavra_secreta, const int& guessesCount)
 {
     std::cout << "Seu chute: ";
     char chute;
     std::cin >> chute;
 
-    (*chutou)[chute] = true;
+    chutou[chute] = true;
 
-    if(letra_existe(chute)){
+    if (letra_existe(chute, palavra_secreta))
+    {
         std::cout << "Você acertou! Seu chute está na palavra." << std::endl;
     }
-    else{
+    else
+    {
         std::cout << "Você errou! Seu chute não está na palavra." << std::endl;
-        chutes_errados->push_back(chute);
+        chutes_errados[guessesCount - 1] = chute;
     }
     std::cout << std::endl;
 }
